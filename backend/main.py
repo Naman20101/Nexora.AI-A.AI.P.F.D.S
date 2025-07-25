@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-import pandas as pd
 import joblib
 
 model = joblib.load("fraud_model.pkl")
@@ -18,3 +17,4 @@ def root():
 def predict(transaction: Transaction):
     prediction = model.predict([transaction.features])
     return {"fraud": bool(prediction[0])}
+
