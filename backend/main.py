@@ -1,20 +1,19 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
 import joblib
-
-model = joblib.load("fraud_model.pkl")
+import os
 
 app = FastAPI()
 
-class Transaction(BaseModel):
-    features: list
+# ✅ Safe model load:
+model_path = os.path.join(os.path.dirname(__file__), "fraud_model.pkl")
 
+if not os.path.exists(model_path):
+    raise FileNotFoundError(f"Model file not found at {model_path}")
+
+model = joblib.load(model_path)
+
+# Your routes here
 @app.get("/")
-def root():
-    return {"message": "Fraud Detection API is up"}
-
-@app.post("/predict")
-def predict(transaction: Transaction):
-    prediction = model.predict([transaction.features])
-    return {"fraud": bool(prediction[0])}
+def home():
+    return {"message": "Model loaded successfully"}
 
