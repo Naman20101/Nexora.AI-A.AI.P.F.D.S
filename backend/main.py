@@ -17,3 +17,6 @@ model = joblib.load(model_path)
 def home():
     return {"message": "Model loaded successfully"}
 
+# trigger redeploy
+
+
